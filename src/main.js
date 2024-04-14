@@ -25,10 +25,10 @@ async function main() {
         console.log(`sum ${sum}, sum for member ${sumForMember}`)
 
         let deltaForMember = group.members.map(member => {
-            console.log(`delta for member ${member.id} is ${group.expenses.sumPending[member.id] ?? 0 - sumForMember}. sum pending ${group.expenses.sumPending[member.id]}`)
+            console.log(`delta for member ${member.id} is ${(group.expenses.sumPending[member.id] ?? 0) - sumForMember}. sum pending ${group.expenses.sumPending[member.id]}`)
             return {
                 id: member.id,
-                delta: group.expenses.sumPending[member.id] ?? 0 - sumForMember,
+                delta: (group.expenses.sumPending[member.id] ?? 0) - sumForMember,
             }
         }).filter(delta => delta.delta !== 0).sort((a, b) => b.delta - a.delta)
 
