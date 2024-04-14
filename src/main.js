@@ -63,14 +63,14 @@ async function main() {
                 const newValueForReceiver = needToCompensate.delta - transactionValue
                 const newValueForPayee = closestPayee.delta + transactionValue
 
-                if (newValueForReceiver === 0) {
+                if (newValueForReceiver < 0.2) {
                     // no longer participates in transactions
                     deltaForMember = deltaForMember.filter(member => member.id !== needToCompensate.id)
                 } else {
                     deltaForMember.find(member => member.id === needToCompensate.id).delta = newValueForReceiver
                 }
 
-                if (newValueForPayee === 0) {
+                if (newValueForPayee < 0.2) {
                     // no longer participates in transactions
                     deltaForMember = deltaForMember.filter(member => member.id !== closestPayee.id)
                 } else {
