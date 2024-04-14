@@ -38,7 +38,7 @@ async function main() {
 
             if (needToCompensate && needToCompensate.delta > 0) {
                 let closestPayee = {}
-                for (const payee of deltaForMember) {
+                for (const payee of deltaForMember.filter(delta => delta.id !== needToCompensate.id)) {
                     if (closestPayee.delta === undefined || closestPayee.delta > needToCompensate.delta + payee.delta) {
                         closestPayee = payee
                     }
