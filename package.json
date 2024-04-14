@@ -1,0 +1,17 @@
+{
+  "name": "grocery",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lowdb": "7.0.1",
+    "node-telegram-bot-api": "0.65.1"
+  }
+}
