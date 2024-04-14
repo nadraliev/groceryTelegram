@@ -25,7 +25,7 @@ async function main() {
         let deltaForMember = group.members.map(member => {
             return {
                 id: member.id,
-                delta: group.expenses.sumPending[member.id] - sumForMember,
+                delta: group.expenses.sumPending[member.id] ?? 0 - sumForMember,
             }
         }).filter(delta => delta.delta !== 0).sort((a, b) => b.delta - a.delta)
 
