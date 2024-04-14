@@ -106,7 +106,7 @@ async function main() {
         }
 
         await db.update(({groups}) => groups.push(newGroup))
-        await db.update(({defaultGroups}) => defaultGroups[msg.chat.id] = groupName)
+        await db.update(({defaultGroups}) => defaultGroups[msg.chat.id.toString()] = groupName)
 
         bot.sendMessage(msg.chat.id, `Group ${groupName} was created`)
     })
@@ -120,14 +120,14 @@ async function main() {
             if (group === undefined) {
                 bot.sendMessage(msg.chat.id, `Group ${groupName} was not found`)
             } else {
-                if (group.members.includes(msg.chat.id)) {
+                if (group.members.includes(msg.chat.id.toString())) {
                     bot.sendMessage(msg.chat.id, `You are already a part of group ${groupName}`)
                 } else {
                     group.members.push({
                         id: msg.chat.id.toString(),
                         name: msg.chat.username,
                     })
-                    defaultGroups[msg.chat.id] = groupName
+                    defaultGroups[msg.chat.id.toString()] = groupName
 
                     bot.sendMessage(msg.chat.id, `You joined group ${groupName}`)
                 }
@@ -136,7 +136,7 @@ async function main() {
     })
 
     bot.onText(/\/status/, async (msg, match) => {
-        const defaultGroup = db.data.defaultGroups[msg.chat.id]
+        const defaultGroup = db.data.defaultGroups[msg.chat.id.toString()]
 
         if (defaultGroup === undefined) {
             bot.sendMessage(msg.chat.id, `Default group not set`)
@@ -153,12 +153,12 @@ async function main() {
         const transactions = group.expenses.pendingTransactions
 
         bot.sendMessage(msg.chat.id, `Pending transactions:
-${transactions.map(transaction => `From ${name(group, transaction.from, msg.chat.id)} to ${name(group, transaction.to, msg.chat.id)}: €${transaction.value.toFixed(2)}\n`)}
+${transactions.map(transaction => `From ${name(group, transaction.from, msg.chat.id.toString())} to ${name(group, transaction.to, msg.chat.id.toString())}: €${transaction.value.toFixed(2)}\n`)}
         `)
     })
 
     bot.onText(/\/last (.+)/, async (msg, match) => {
-        const defaultGroup = db.data.defaultGroups[msg.chat.id]
+        const defaultGroup = db.data.defaultGroups[msg.chat.id.toString()]
 
         if (defaultGroup === undefined) {
             bot.sendMessage(msg.chat.id, `Default group not set`)
@@ -207,7 +207,7 @@ ${expenses}
     })
 
     bot.onText(/\/sent/, async (msg, match) => {
-        const defaultGroup = db.data.defaultGroups[msg.chat.id]
+        const defaultGroup = db.data.defaultGroups[msg.chat.id.toString()]
 
         if (defaultGroup === undefined) {
             bot.sendMessage(msg.chat.id, `Default group not set`)
@@ -221,8 +221,8 @@ ${expenses}
             return
         }
 
-        const completedTransactions = group.expenses.pendingTransactions.filter(transaction => transaction.from === msg.chat.id)
-        group.expenses.pendingTransactions = group.expenses.pendingTransactions.filter(transaction => transaction.from !== msg.chat.id)
+        const completedTransactions = group.expenses.pendingTransactions.filter(transaction => transaction.from === msg.chat.id.toString())
+        group.expenses.pendingTransactions = group.expenses.pendingTransactions.filter(transaction => transaction.from !== msg.chat.id.toString())
 
         completedTransactions.forEach(transaction => {
             group.expenses.sumPending[transaction.to] = group.expenses.sumPending[transaction.to] - transaction.value
@@ -241,7 +241,7 @@ ${expenses}
             return
         }
 
-        const defaultGroup = db.data.defaultGroups[msg.chat.id]
+        const defaultGroup = db.data.defaultGroups[msg.chat.id.toString()]
 
         if (defaultGroup === undefined) {
             bot.sendMessage(msg.chat.id, `Default group not set`)
@@ -256,7 +256,7 @@ ${expenses}
         }
 
         await db.update(data => {
-            group.expenses.sumPending[msg.chat.id] = Number(group.expenses.sumPending[msg.chat.id] ?? 0) + expenseValue
+            group.expenses.sumPending[msg.chat.id] = Number(group.expenses.sumPending[msg.chat.id.toString()] ?? 0) + expenseValue
             group.expenses.fullList.push({
                 name: expenseName,
                 value: expenseValue,
