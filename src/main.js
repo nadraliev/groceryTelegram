@@ -153,7 +153,7 @@ async function main() {
         const transactions = group.expenses.pendingTransactions
 
         bot.sendMessage(msg.chat.id, `Pending transactions:
-${transactions.map(transaction => `From ${name(group, transaction.from, msg.chat.id)} to ${name(group, transaction.to, msg.chat.id)}: €${transaction.value}\n`)}
+${transactions.map(transaction => `From ${name(group, transaction.from, msg.chat.id)} to ${name(group, transaction.to, msg.chat.id)}: €${transaction.value.toFixed(2)}\n`)}
         `)
     })
 
