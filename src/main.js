@@ -91,7 +91,7 @@ async function main() {
             name: groupName,
             members: [
                 {
-                    id: msg.chat.id,
+                    id: msg.chat.id.toString(),
                     name: msg.chat.username,
                 }
             ],
@@ -121,7 +121,7 @@ async function main() {
                     bot.sendMessage(msg.chat.id, `You are already a part of group ${groupName}`)
                 } else {
                     group.members.push({
-                        id: msg.chat.id,
+                        id: msg.chat.id.toString(),
                         name: msg.chat.username,
                     })
                     defaultGroups[msg.chat.id] = groupName
@@ -257,7 +257,7 @@ ${expenses}
             group.expenses.fullList.push({
                 name: expenseName,
                 value: expenseValue,
-                spender: msg.chat.id,
+                spender: msg.chat.id.toString(),
             })
 
         })
