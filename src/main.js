@@ -36,6 +36,8 @@ async function main() {
 
             console.log(`receiver ${JSON.stringify(needToCompensate)}`)
 
+            console.log(`all members ${JSON.stringify(deltaForMember)}`)
+
             if (needToCompensate && needToCompensate.delta > 0) {
                 let closestPayee = {}
                 for (const payee of deltaForMember.filter(delta => delta.id !== needToCompensate.id)) {
