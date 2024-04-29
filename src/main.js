@@ -225,9 +225,25 @@ ${expenses}
         group.expenses.pendingTransactions = group.expenses.pendingTransactions.filter(transaction => transaction.from !== msg.chat.id.toString())
 
         completedTransactions.forEach(transaction => {
-            group.expenses.sumPending[transaction.to] = group.expenses.sumPending[transaction.to] - transaction.value
-            group.expenses.sumPending[transaction.from] = group.expenses.sumPending[transaction.from] + transaction.value
+            group.expenses.sumPending[transaction.to] = (group.expenses.sumPending[transaction.to] ?? 0) - transaction.value
+            group.expenses.sumPending[transaction.from] = (group.expenses.sumPending[transaction.from ?? 0]) + transaction.value
         })
+
+        const sums = group.members.map(member => group.expenses.sumPending[member.id])
+        const firstNonNull = sums.find(sum => sum !== null)
+        let equal = true
+        if (firstNonNull) {
+            for (const sum of sums) {
+                if (Math.abs(sum - firstNonNull) > 0.1) {
+                    equal = false
+                }
+            }
+        }
+
+        if (equal) {
+            group.members.forEach(member => group.expenses.sumPending[member.id] = 0)
+        }
+
         await db.write()
     })
 
